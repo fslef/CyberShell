@@ -1,7 +1,7 @@
 # Pull Request
 
 <!--
-    Keep this sction empty
+    Keep this section empty
 -->
 
 ## Pull Request (PR) description
@@ -27,10 +27,9 @@
 -->
 
 - [ ] The PR represents a single logical change.
-- [ ] Added an entry under the Unreleased section of in the CHANGELOG.md as per [format](https://keepachangelog.com/en/1.0.0/).
+- [ ] Added an entry under the Unreleased section of in the CHANGELOG.md as per [format](https://keepachangelog.com/en/1.1.0//).
 - [ ] Local clean build passes without issue or fail tests (`build.ps1 -ResolveDependency`).
 - [ ] Documentation added/updated in src/WikiSource.
-- [ ] Comment-based help added/updated to any .ps1 files..
 - [ ] Unit tests added/updated. See [CyberShell Module Testing Guidelines](https://github.com/PowerShell/DscResources/blob/master/TestsGuidelines.md).
 - [ ] Integration tests added/updated (where possible). See [CyberShell Module Testing Guidelines](https://github.com/PowerShell/DscResources/blob/master/TestsGuidelines.md).
 
