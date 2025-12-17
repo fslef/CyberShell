@@ -107,7 +107,7 @@ DscTest:
 ####################################################
 # Defining 'Workflows' (suite of InvokeBuild tasks) to be run using their alias
 BuildWorkflow:
-  '.': # "." is the default Invoke-Build workflow. It is called when no -Tasks is specified to the build.ps1
+  ".": # "." is the default Invoke-Build workflow. It is called when no -Tasks is specified to the build.ps1
     - build
     - test
 
@@ -116,7 +116,6 @@ BuildWorkflow:
     - Build_Module_ModuleBuilder
     - Build_NestedModules_ModuleBuilder
     - Create_changelog_release_output
-
 
   pack:
     - build
@@ -135,8 +134,6 @@ BuildWorkflow:
     - Clean_Markdown_Metadata
     - Package_Wiki_Content
 
-
-
   # Defining test task to be run when invoking `./build.ps1 -Tasks test`
   test:
     # - Set_PSModulePath
@@ -153,13 +150,13 @@ BuildWorkflow:
 
 ModuleBuildTasks:
   Sampler:
-    - '*.build.Sampler.ib.tasks'
+    - "*.build.Sampler.ib.tasks"
   Sampler.GitHubTasks:
-    - '*.ib.tasks'
+    - "*.ib.tasks"
   # DscResource.Test:
   #   - 'Task.*'
   DscResource.DocGenerator:
-    - 'Task.*'
+    - "Task.*"
 
 # Invoke-Build Header to be used to 'decorate' the terminal output of the tasks.
 TaskHeader: |
@@ -175,7 +172,7 @@ TaskHeader: |
 
 GitHubConfig:
   GitHubFilesToAdd:
-    - 'CHANGELOG.md'
+    - "CHANGELOG.md"
   ReleaseAssets:
     - output/WikiContent.zip
   GitHubConfigUserName: fslef
@@ -207,5 +204,5 @@ DscResource.DocGenerator:
     #   Type: CompositeResource
     #   Category: Resources
   Generate_Wiki_Sidebar:
-     Debug: false
-     AlwaysOverwrite: true
+    Debug: false
+    AlwaysOverwrite: true
