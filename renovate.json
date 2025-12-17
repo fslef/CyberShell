@@ -1,0 +1,105 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices",
+    "mergeConfidence:all-badges"
+  ],
+  "configMigration": true,
+  "dependencyDashboardAutoclose": true,
+  "dependencyDashboardLabels": [
+    "dependencies"
+  ],
+  "dependencyDashboardOSVVulnerabilitySummary": "all",
+  "enabled": true,
+  "osvVulnerabilityAlerts": true,
+  "packageRules": [
+    {
+      "matchUpdateTypes": [
+        "major",
+        "minor"
+      ],
+      "enabled": true,
+      "description": "Enable only major and minor updates"
+    },
+    {
+      "matchUpdateTypes": [
+        "patch"
+      ],
+      "enabled": false,
+      "description": "Disable patch updates"
+    },
+    {
+      "groupName": "Docker",
+      "groupSlug": "docker",
+      "matchDatasources": [
+        "go"
+      ],
+      "description": [
+        "Group Docker dependency updates in single PR."
+      ],
+      "matchPackageNames": [
+        "github.com/docker{/,}**",
+        "github.com/compose-spec{/,}**"
+      ]
+    },
+    {
+      "groupName": "Github Actions",
+      "groupSlug": "github-actions",
+      "matchDatasources": [
+        "github-tags"
+      ],
+      "addLabels": [
+        "ci"
+      ],
+      "description": [
+        "Add ci label to PRs which are related to Github Actions.",
+        "Group CI dependency updates in single PR."
+      ]
+    },
+    {
+      "groupName": "Azure Bicep",
+      "matchDatasources": [
+        "azure-bicep-resource"
+      ],
+      "description": [
+        "Group Azure Bicep dependency updates in single PR."
+      ]
+    },
+    {
+      "groupName": "Terraform",
+      "matchDatasources": [
+        "terraform-module",
+        "terraform-provider"
+      ],
+      "description": [
+        "Always use latest version for Terraform modules and providers."
+      ]
+    },
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "allowedVersions": "/^latest$/",
+      "pinDigests": false,
+      "description": [
+        "Always use latest version for container images.",
+        "Do not pin by digest."
+      ]
+    }
+  ],
+  "automerge": true,
+  "platformAutomerge": true,
+  "printConfig": false,
+  "rebaseWhen": "behind-base-branch",
+  "recreateWhen": "auto",
+  "timezone": "Etc/UTC",
+  "schedule": [
+    "* * * * 0,6"
+  ],
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": [
+      "security"
+    ]
+  }
+}
