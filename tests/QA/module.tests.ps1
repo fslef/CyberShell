@@ -93,7 +93,7 @@ Describe 'Changelog Management' -Tag 'Changelog' {
     }
 }
 
-Describe 'General module control' -Tag 'FunctionalQuality' {
+Describe 'General module control' -Tags 'FunctionalQuality' {
     It 'Should import without errors' {
         { Import-Module -Name $script:moduleName -Force -ErrorAction Stop } | Should -Not -Throw
 
@@ -121,45 +121,6 @@ BeforeDiscovery {
     }
 }
 
-<<<<<<< HEAD
-Describe 'Quality for module' -Tag 'TestQuality' {
-    BeforeDiscovery {
-        if (Get-Command -Name Invoke-ScriptAnalyzer -ErrorAction SilentlyContinue)
-        {
-            $scriptAnalyzerRules = Get-ScriptAnalyzerRule
-        }
-        else
-        {
-            if ($ErrorActionPreference -ne 'Stop')
-            {
-                Write-Warning -Message 'ScriptAnalyzer not found!'
-            }
-            else
-            {
-                throw 'ScriptAnalyzer not found!'
-            }
-        }
-    }
-||||||| 0798f84
-Describe 'Quality for module' -Tags 'TestQuality' {
-    BeforeDiscovery {
-        if (Get-Command -Name Invoke-ScriptAnalyzer -ErrorAction SilentlyContinue)
-        {
-            $scriptAnalyzerRules = Get-ScriptAnalyzerRule
-        }
-        else
-        {
-            if ($ErrorActionPreference -ne 'Stop')
-            {
-                Write-Warning -Message 'ScriptAnalyzer not found!'
-            }
-            else
-            {
-                throw 'ScriptAnalyzer not found!'
-            }
-        }
-    }
-=======
 # Describe 'Quality for module' -Tags 'TestQuality' {
 #     BeforeDiscovery {
 #         if (Get-Command -Name Invoke-ScriptAnalyzer -ErrorAction SilentlyContinue)
@@ -178,21 +139,10 @@ Describe 'Quality for module' -Tags 'TestQuality' {
 #             }
 #         }
 #     }
->>>>>>> origin/main
 
-<<<<<<< HEAD
-    # It 'Should have a unit test for <Name>' -ForEach $testCases {
-    #     Get-ChildItem -Path 'tests\' -Recurse -Include "$Name.Tests.ps1" | Should -Not -BeNullOrEmpty
-    # }
-||||||| 0798f84
-    It 'Should have a unit test for <Name>' -ForEach $testCases {
-        Get-ChildItem -Path 'tests\' -Recurse -Include "$Name.Tests.ps1" | Should -Not -BeNullOrEmpty
-    }
-=======
 #     It 'Should have a unit test for <Name>' -ForEach $testCases {
 #         Get-ChildItem -Path 'tests\' -Recurse -Include "$Name.Tests.ps1" | Should -Not -BeNullOrEmpty
 #     }
->>>>>>> origin/main
 
 #     It 'Should pass Script Analyzer for <Name>' -ForEach $testCases -Skip:(-not $scriptAnalyzerRules) {
 #         $functionFile = Get-ChildItem -Path $sourcePath -Recurse -Include "$Name.ps1"
@@ -204,7 +154,7 @@ Describe 'Quality for module' -Tags 'TestQuality' {
 #     }
 # }
 
-Describe 'Help for module' -Tag 'helpQuality' {
+Describe 'Help for module' -Tags 'helpQuality' {
     It 'Should have .SYNOPSIS for <Name>' -ForEach $testCases {
         $functionFile = Get-ChildItem -Path $sourcePath -Recurse -Include "$Name.ps1"
 
