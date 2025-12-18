@@ -1,0 +1,90 @@
+#dotsource the corresponding object class
+class ListOfLogCategory {
+    # Static property to hold the list of resources
+    static [System.Collections.Generic.List[LogCategoryObj]] $Resources
+
+    # Static method to initialize the list of resources. Called in the other
+    # static methods to avoid needing to explicit initialize the value.
+    static [void] Initialize() { [ListOfLogCategory]::Initialize($false) }
+
+    # Initialize the list of resources.
+    static [bool] Initialize([bool]$force) {
+        if ([ListOfLogCategory]::Resources.Count -gt 0 -and -not $force) {
+            return $false
+        }
+        [ListOfLogCategory]::Resources = [System.Collections.Generic.List[LogCategoryObj]]::new()
+        return $true
+    }
+
+    # Ensure the LogCategoryObj is valid for the list.
+    static [void] Validate([LogCategoryObj]$Resource) {
+        $Prefix = 'Resource validation failed: Resource must be defined with the ContainerId, ResourceTypeName, and SourceType properties, but'
+        if ($null -eq $Resource) { throw "$Prefix was null" }
+        if ([string]::IsNullOrEmpty($Resource.ContainerId)) {
+            throw "$Prefix ContainerId wasn't defined"
+        }
+        if ([string]::IsNullOrEmpty($Resource.ResourceTypeName)) {
+            throw "$Prefix ResourceTypeName wasn't defined"
+        }
+        if ([string]::IsNullOrEmpty($Resource.SourceType)) {
+            throw "$Prefix SourceType wasn't defined"
+        }
+    }
+
+    # Static methods to manage the list of LogCategoryObj.
+    # Add a LogCategoryObj if it's not already in the list.
+    static [void] Add([LogCategoryObj]$Resource) {
+        [ListOfLogCategory]::Initialize()
+        [ListOfLogCategory]::Validate($Resource)
+        $FindPredicate = {
+            param([LogCategoryObj]$r)
+            $r.ContainerId -eq $Resource.ContainerId -and
+            $r.ResourceTypeName -eq $Resource.ResourceTypeName -and
+            $r.SourceType -eq $Resource.SourceType
+        }.GetNewClosure()
+        if ([ListOfLogCategory]::Resources.Find($FindPredicate)) {
+            throw "Resource with ContainerId '$Resource.ContainerId', ResourceTypeName '$Resource.ResourceTypeName', and SourceType '$Resource.SourceType' already in list"
+        }
+        [ListOfLogCategory]::Resources.Add($Resource)
+    }
+
+    # Clear the list of LogCategoryObj.
+    static [void] Clear() {
+        [ListOfLogCategory]::Initialize()
+        [ListOfLogCategory]::Resources.Clear()
+    }
+
+    # Method to find the first LogCategoryObj that matches the given criteria.
+    # This method stops searching as soon as it finds a match, so it's more efficient for large lists.
+    # However, it will not alert you to duplicate entries.
+    static [LogCategoryObj] Find([scriptblock]$Predicate) {
+        [ListOfLogCategory]::Initialize()
+        return [ListOfLogCategory]::Resources.Find($Predicate)
+    }
+
+    # Method to find all LogCategoryObjs that match the given criteria.
+    # This method searches the entire list and returns all matches.
+    # Use this method when you need to find all matches, or when you need to check for duplicates.
+    static [LogCategoryObj[]] FindAll([scriptblock]$Predicate) {
+        [ListOfLogCategory]::Initialize()
+        return [ListOfLogCategory]::Resources.FindAll($Predicate)
+    }
+
+    # Remove a LogCategoryObj from the list.
+    static [void] Remove([LogCategoryObj]$Resource) {
+        [ListOfLogCategory]::Initialize()
+        [ListOfLogCategory]::Resources.Remove($Resource)
+    }
+
+    # Remove a LogCategoryObj from the list by property and value.
+    static [void] RemoveBy([string]$Property, [string]$Value) {
+        [ListOfLogCategory]::Initialize()
+        $Index = [ListOfLogCategory]::Resources.FindIndex({
+                param($r)
+                $r.$Property -eq $Value
+            }.GetNewClosure())
+        if ($Index -ge 0) {
+            [ListOfLogCategory]::Resources.RemoveAt($Index)
+        }
+    }
+}

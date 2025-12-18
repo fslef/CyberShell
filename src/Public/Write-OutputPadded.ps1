@@ -1,54 +1,55 @@
 function Write-OutputPadded {
     <#
 .SYNOPSIS
-   Writes colorized and formatted output to the console.
+    Writes colorized console output with indentation.
 
 .DESCRIPTION
-   The Write-OutputPadded function writes colorized and formatted output to the console. It supports indentation, centering, and different types of messages (Error, Warning, Success, Information, Data, Debug, Important).
+    This function formats text for console display with indentation, centering and
+    message styles (Information, Success, Warning, Error, Important, Verbose, Debug, Data).
+    Verbose/Debug/Data messages are controlled by $script:VerbosePreference and
+    $script:DebugPreference.
 
 .PARAMETER Text
-   The text to be written to the console.
+    Text to display.
+    Does not accept pipeline input.
 
 .PARAMETER IdentLevel
-   The level of indentation for the output text. Default is 0.
+    Indentation level (4 spaces per level).
+    Default: 0.
 
 .PARAMETER Width
-   The width of the output text. Default is 120.
+    Total output width used for centering and title borders.
+    Default: 120.
 
 .PARAMETER Centered
-   If set, the output text will be centered.
+    When specified, centers the text within Width.
 
 .PARAMETER isTitle
-   If set, the output text will be formatted as a title.
+    When specified, writes a top/bottom border and applies centering.
 
 .PARAMETER Type
-   The type of the message. It can be one of the following: "Error", "Warning", "Success", "Information", "Data", "Debug", "Important". The type determines the color of the output text.
+    Message type that controls coloring.
+    Valid values: Information, Success, Warning, Error, Important, Verbose, Debug, Data.
 
 .PARAMETER BlankLineBefore
-    If set, a blank line will be written before the output text.
+    When specified, writes a blank line before the output.
 
 .EXAMPLE
-   Write-OutputPadded -Text "Title" -isTitle -Type "Important"
-   Writes the text "Title" formatted as a title and colors it as an Important message.
+    Write-OutputPadded -Text 'Governance Assignments' -IdentLevel 1 -isTitle -Type Information
+
+    Writes an indented title.
 
 .EXAMPLE
-   Write-OutputPadded -Text "This is a ERROR demo text" -Type "Error" -IdentLevel 2
-   Writes the text "This is a ERROR demo text" with an indentation level of 2 and colors it as an Error message.
+    Write-OutputPadded -Text 'Something failed' -Type Error -IdentLevel 2
 
-.EXAMPLE
-   Write-OutputPadded -Text "This is a WARNING demo text" -Type "Warning" -IdentLevel 2
-   Writes the text "This is a WARNING demo text" with an indentation level of 2 and colors it as a Warning message.
+    Writes an indented error message.
 
-.EXAMPLE
-   Write-OutputPadded -Text "This is a SUCCESS demo text" -Type "Success" -IdentLevel 2
-   Writes the text "This is a SUCCESS demo text" with an indentation level of 2 and colors it as a Success message.
-
-.EXAMPLE
-   Write-OutputPadded -Text "This is a INFORMATION demo text" -Type "Information" -IdentLevel 2
-   Writes the text "This is a INFORMATION demo text" with an indentation level of 2 and colors it as an Information message.
+.OUTPUTS
+    None
+    Writes to the host via Write-Host.
 
 .NOTES
-   The function uses Write-Host for colorized output formatting.
+    Uses Write-Host to support coloring.
 #>
 
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Justification = "Write-Host used for colorized output formatting.")]

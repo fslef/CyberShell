@@ -1,46 +1,68 @@
 function Update-CsAzGovAssignment {
     <#
 .SYNOPSIS
-Updates an Azure Governance Assignment.
+    Updates an Azure governance assignment.
 
 .DESCRIPTION
-The Update-CsAzGovAssignment function updates an Azure Governance Assignment with the provided parameters.
+    This function updates a governance assignment associated with a Microsoft Defender
+    for Cloud assessment. It retrieves the existing assignment, applies the requested
+    changes (due date, owner, notifications, etc.), then submits the update via the ARM API.
+    The function supports -WhatIf/-Confirm.
 
 .PARAMETER azAPICallConf
-A hashtable containing the configuration for the Azure API call.
+    AzAPICall configuration hashtable.
+    Does not accept pipeline input.
 
 .PARAMETER resourceId
-The unique identifier of the resource.
+    ARM resource id where the assessment is attached.
+    Accepts pipeline input by property name.
 
 .PARAMETER AssessmentName
-The name of the assessment.
+    Assessment name (resource name segment).
+    Accepts pipeline input by property name.
 
 .PARAMETER assignmentKey
-The key of the assignment.
+    Governance assignment key.
+    Accepts pipeline input by property name.
 
 .PARAMETER RemediationDueDate
-The due date for remediation. This is optional.
+    Remediation due date. Optional.
+    Does not accept pipeline input.
 
 .PARAMETER IsGracePeriod
-Indicates whether there is a grace period. This is optional.
+    Indicates whether a grace period is enabled. Optional.
+    Does not accept pipeline input.
 
 .PARAMETER OwnerEmailAddress
-The email address of the owner. This is optional.
+    Owner email address. Optional.
+    Does not accept pipeline input.
 
 .PARAMETER OwnerEmailNotification
-Indicates whether the owner will receive email notifications. This is optional.
+    Enables/disables owner email notification. Optional.
+    Does not accept pipeline input.
 
 .PARAMETER ManagerEmailNotification
-Indicates whether the manager will receive email notifications. This is optional.
+    Enables/disables manager email notification. Optional.
+    Does not accept pipeline input.
 
 .PARAMETER NotificationDayOfWeek
-The day of the week when notifications will be sent. This is optional and must be one of 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'.
+    Day of week for notifications. Optional.
+    Valid values: Monday..Sunday.
+    Does not accept pipeline input.
 
 .EXAMPLE
-$azAPICallConf = @{...}
-Update-CsAzGovAssignment -azAPICallConf $azAPICallConf -resourceId "resourceId" -AssessmentName "AssessmentName" -assignmentKey "assignmentKey"
+    Update-CsAzGovAssignment -azAPICallConf $azAPICallConf -resourceId $resourceId -AssessmentName $AssessmentName -assignmentKey $assignmentKey -RemediationDueDate (Get-Date).AddDays(30)
 
-This example updates an Azure Governance Assignment with the provided parameters.
+    Sets the remediation due date to 30 days from now.
+
+.EXAMPLE
+    Update-CsAzGovAssignment -azAPICallConf $azAPICallConf -resourceId $resourceId -AssessmentName $AssessmentName -assignmentKey $assignmentKey -OwnerEmailAddress 'owner@contoso.com' -NotificationDayOfWeek 'Monday'
+
+    Updates the owner and the notification day.
+
+.OUTPUTS
+    System.Object
+    Returns the object emitted by AzAPICall for the PUT request.
 #>
     [CmdletBinding(SupportsShouldProcess)]
     param (

@@ -1,32 +1,39 @@
 function Get-CsAzGovAssignment {
     <#
 .SYNOPSIS
-    Retrieves Azure Governance Assignments.
+    Retrieves Azure governance assignments via Resource Graph.
 
 .DESCRIPTION
-    This function retrieves the list of security assessments from Azure and stores the governance assignments.
+    This function runs an Azure Resource Graph query (through the ARM Resource Graph API)
+    to retrieve governance assignments related to Microsoft Defender for Cloud assessments.
+    It can optionally filter to overdue items only.
 
 .PARAMETER azAPICallConf
-    A hashtable containing the configuration for the Azure API call.
+    AzAPICall configuration hashtable.
+    Does not accept pipeline input.
 
 .PARAMETER CsEnvironment
-    The environment for which the function is being run.
+    CyberShell environment name to inject in the output (csEnvironment field).
+    Does not accept pipeline input.
 
 .PARAMETER OverdueOnly
-    A switch parameter that retrieves only the overdue governance assignments.
+    When specified, filters assignments to the "Overdue" status only.
+    Does not accept pipeline input.
 
 .EXAMPLE
-    Get-CsAzGovAssignment -SubId "your-subscription-id" -azAPICallConf $yourConfig -CsEnvironment "your-environment"
+    $azAPICallConf = initAzAPICall -SubscriptionId4AzContext '<subId>' -TenantId4AzContext '<tenantId>'
+    Get-CsAzGovAssignment -azAPICallConf $azAPICallConf -CsEnvironment 'Azure'
 
-.INPUTS
-    String, Hashtable, String
+    Retrieves all assignments (OnTime, Overdue, Unassigned, Completed).
+
+.EXAMPLE
+    Get-CsAzGovAssignment -azAPICallConf $azAPICallConf -CsEnvironment 'Azure' -OverdueOnly
+
+    Retrieves overdue assignments only.
 
 .OUTPUTS
-    ArrayList
-    Returns an ArrayList of governance assignments.
-
-.NOTES
-    This function makes use of the AzAPICall function to make the API call to Azure.
+    System.Object
+    Returns the object emitted by AzAPICall (Resource Graph response content).
 #>
 
     param (

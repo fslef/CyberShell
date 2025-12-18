@@ -12,15 +12,18 @@
     #    }
     #}
 
-    InvokeBuild                 = 'latest'
-    PSScriptAnalyzer            = 'latest'
-    Pester                      = 'latest'
-    ModuleBuilder               = 'latest'
-    ChangelogManagement         = 'latest'
-    Sampler                     = 'latest'
-    'Sampler.GitHubTasks'       = 'latest'
-    'DscResource.DocGenerator'  = 'latest'
-    PlatyPS                     = 'latest'
+    InvokeBuild                = 'latest'
+    PSScriptAnalyzer           = 'latest'
+    Pester                     = 'latest'
+    ModuleBuilder              = 'latest'
+    ChangelogManagement        = 'latest'
+    Sampler                    = 'latest'
+    'Sampler.GitHubTasks'      = 'latest'
+    'DscResource.DocGenerator' = 'latest'
+    PlatyPS                    = 'latest'
+    'Az.Accounts'              = 'latest'
+    'Az.Monitor'               = 'latest'
+    'Az.Resources'             = 'latest'
 
 
 }

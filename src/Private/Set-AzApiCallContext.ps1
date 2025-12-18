@@ -1,36 +1,50 @@
 function Set-AzApiCallContext {
     <#
 .SYNOPSIS
-Sets the context for Azure API calls.
+    Initializes AzAPICall context and a bearer token.
 
 .DESCRIPTION
-The Set-AzApiCallContext function sets up the context for Azure API calls. It takes in parameters like SubscriptionId, TenantId, targetEndpoint, and others. It then initializes the AzAPICall and creates a bearer token for the specified target endpoint.
+    This function creates an AzAPICall configuration (initAzAPICall) for a given
+    subscription and tenant, then generates a bearer token for a target endpoint
+    (ARM, MicrosoftGraph, etc.). It supports -WhatIf/-Confirm via ShouldProcess.
 
 .PARAMETER SubscriptionId
-The subscription ID for the Azure account.
+    Azure subscription id.
+    Does not accept pipeline input.
 
 .PARAMETER TenantId
-The tenant ID for the Azure account.
+    Azure tenant id.
+    Does not accept pipeline input.
 
 .PARAMETER targetEndpoint
-The target endpoint for the Azure API call. It must be one of 'MicrosoftGraph', 'ARM', 'KeyVault', 'LogAnalytics', 'MonitorIngest' and must match the specified pattern.
+    Target endpoint for which to create a token.
+    Valid values: MicrosoftGraph, ARM, KeyVault, LogAnalytics, MonitorIngest.
+    Does not accept pipeline input.
 
 .PARAMETER DebugAzAPICall
-A boolean value indicating whether to debug the Azure API call.
+    Enables AzAPICall debug mode.
+    Default: False.
 
 .PARAMETER WriteMethod
-The method to write the output.
+    Output method used by AzAPICall (for example Output).
+    Default: Output.
 
 .PARAMETER DebugWriteMethod
-The method to write the debug output.
+    Debug output method used by AzAPICall (for example Warning).
+    Default: Warning.
 
 .PARAMETER SkipAzContextSubscriptionValidation
-A boolean value indicating whether to skip Azure context subscription validation.
+    When True, skips AzContext subscription validation.
+    Default: True.
 
 .EXAMPLE
-Set-AzApiCallContext -SubscriptionId "sub-id" -TenantId "tenant-id" -targetEndpoint "https://example.blob.core.windows.net"
+    Set-AzApiCallContext -SubscriptionId '<subId>' -TenantId '<tenantId>' -targetEndpoint ARM -WhatIf
 
-This example shows how to set the Azure API call context.
+    Shows what would happen without executing.
+
+.OUTPUTS
+    None
+    Initializes AzAPICall and writes informational messages.
 #>
 
     [CmdletBinding(SupportsShouldProcess = $true)]
@@ -43,7 +57,6 @@ This example shows how to set the Azure API call context.
 
         [Parameter(Mandatory = $true)]
         [ValidateSet('MicrosoftGraph', 'ARM', 'KeyVault', 'LogAnalytics', 'MonitorIngest')]
-        [ValidatePattern('^https://[a-z0-9]+\.blob\.core\.windows\.net$|^https://[a-z0-9]+\.blob\.storage\.azure\.net$')]
         [string]$targetEndpoint,
 
         [bool]$DebugAzAPICall = $False,
