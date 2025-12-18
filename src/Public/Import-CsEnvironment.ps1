@@ -1,26 +1,36 @@
 function Import-CsEnvironment {
     <#
 .SYNOPSIS
-   Imports CyberShell environments and configuration from a JSONC file.
+    Imports CyberShell configuration from a JSONC file.
 
 .DESCRIPTION
-   The Import-CsEnvironment function imports CyberShell environments and configuration from a specified JSONC file.
-   If no file is specified, it defaults to the CyberShell-Config.jsonc file in the .cybershell directory of the user's home directory.
+    This function loads a JSONC configuration file (practically JSON) and exposes
+    CyberShell environments and settings. If no path is provided, it defaults to
+    $HOME/.cybershell/CyberShell-Config.jsonc (or the CYBERSHELL_CONFIG environment
+    variable when set).
 
 .PARAMETER JsonPath
-   The path to the JSONC file to import. If not specified, defaults to $HOME/.cybershell/CyberShell-Config.jsonc.
+    Path to the JSONC file to import.
+    Default: $HOME/.cybershell/CyberShell-Config.jsonc.
+    Does not accept pipeline input.
 
 .EXAMPLE
-   Import-CsEnvironment -JsonPath "C:\path\to\your\file.jsonc"
+    Import-CsEnvironment
 
-.INPUTS
-   String. Path to the JSONC file.
+    Imports configuration from the default location.
+
+.EXAMPLE
+    Import-CsEnvironment -JsonPath "$HOME/.cybershell/CyberShell-Config.jsonc"
+
+    Imports configuration from an explicit path.
 
 .OUTPUTS
-   Hashtable. The imported CyberShell data.
+    None
+    This function stores imported data in scope variables (CsData) rather than returning it.
 
 .NOTES
-   The imported data is stored in a global variable $global:CsData.
+    Imported data is stored in $script:CsData (module scope) and also copied to
+    $global:CsData for compatibility.
 #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidGlobalVars", "", Justification = 'Global variable used for $CsData.')]
     [CmdletBinding()]
@@ -69,21 +79,24 @@ function Import-CsEnvironment {
     }
 
     # Structured global data storage
-    $global:CsData = @{
+    $script:CsData = @{
         "Environments" = $rawData["CyberShellEnvironments"];
         "Settings"     = $rawData["Settings"];
     }
 
+    # Backward compatibility
+    $global:CsData = $script:CsData
+
     # Debug output for imported data
     Write-OutputPadded "Environment loaded:" -IdentLevel 1 -Type "Debug" -BlankLineBefore
-    Write-OutputPadded "Environment: $($global:CsData.Environments | ConvertTo-Json)" -IdentLevel 1 -Type "Data"
+    Write-OutputPadded "Environment: $($script:CsData.Environments | ConvertTo-Json)" -IdentLevel 1 -Type "Data"
 
     # debug output for settings
 
     # if settings exist, output them
-    if ($global:CsData.Settings) {
+    if ($script:CsData.Settings) {
         Write-OutputPadded "Settings loaded:" -IdentLevel 1 -Type "Debug" -BlankLineBefore
-        Write-OutputPadded "Settings: $($global:CsData.Settings | ConvertTo-Json) " -IdentLevel 1 -Type "Data"
+        Write-OutputPadded "Settings: $($script:CsData.Settings | ConvertTo-Json) " -IdentLevel 1 -Type "Data"
     }
     else {
         Write-OutputPadded "No settings found in the config file." -IdentLevel 1 -Type "Debug"
@@ -91,14 +104,13 @@ function Import-CsEnvironment {
 
 
     # CSData.settings.ExecutionPreference exist then set the script execution preference
-    if ($global:CsData.Settings.ExecutionPreference) {
-        Set-ScriptExecutionPreference -ExecutionPreference $global:CsData.Settings.ExecutionPreference
-        Write-OutputPadded "Script execution preference set to $($global:CsData.Settings.ExecutionPreference)" -IdentLevel 1 -Type "Debug"
+    if ($script:CsData.Settings.ExecutionPreference) {
+        Set-ScriptExecutionPreference -ExecutionPreference $script:CsData.Settings.ExecutionPreference
+        Write-OutputPadded "Script execution preference set to $($script:CsData.Settings.ExecutionPreference)" -IdentLevel 1 -Type "Debug"
         Write-OutputPadded " " -Type "Debug"
     }
 
-
-    If ($global:CsData.Settings.ExecutionPreference -eq "Debug") {
+    If ($script:CsData.Settings.ExecutionPreference -eq "Debug") {
         Write-OutputPadded "Debug Informations:" -IdentLevel 1 -Type "Debug"
     }
     else {
@@ -108,6 +120,6 @@ function Import-CsEnvironment {
     Write-OutputPadded "JsonPath: $JsonPath" -IdentLevel 2 -Type "Debug"
 
     Write-OutputPadded "Imported CyberShell Data:" -IdentLevel 2 -Type "Debug" -BlankLineBefore
-    Write-OutputPadded "$(ConvertTo-Json $global:CsData -Depth 20)" -IdentLevel 2 -Type "Data"
+    Write-OutputPadded "$(ConvertTo-Json $script:CsData -Depth 20)" -IdentLevel 2 -Type "Data"
 
 }

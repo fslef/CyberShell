@@ -1,28 +1,38 @@
 function Set-ScriptExecutionPreference {
     <#
 .SYNOPSIS
-   Sets the script execution preference.
+   Sets module Verbose/Debug preferences.
 
 .DESCRIPTION
-   The Set-ScriptExecutionPreference function sets the script execution preference. It supports three levels of verbosity: "Information", "Verbose", and "Debug".
+   This function configures $script:VerbosePreference and $script:DebugPreference
+   to control Verbose, Debug, and Data output across the module.
 
 .PARAMETER ExecutionPreference
-   The execution preference to be set. It can be one of the following: "Information", "Verbose", "Debug". Default is "Information".
-
-.EXAMPLE
-   Set-ScriptExecutionPreference -ExecutionPreference "Verbose"
-   Sets the script execution preference to "Verbose". This will enable verbose logging.
-
-.EXAMPLE
-   Set-ScriptExecutionPreference -ExecutionPreference "Debug"
-   Sets the script execution preference to "Debug". This will enable verbose and debug logging.
+   Desired verbosity level.
+   Valid values: Information, Verbose, Debug.
+   Default: Information.
+   Does not accept pipeline input.
 
 .EXAMPLE
    Set-ScriptExecutionPreference
-   Sets the script execution preference to the default "Information". This will disable verbose and debug logging.
+
+   Resets to Information mode (no Verbose/Debug output).
+
+.EXAMPLE
+   Set-ScriptExecutionPreference -ExecutionPreference Verbose
+
+   Enables Verbose output and disables Debug.
+
+.EXAMPLE
+   Set-ScriptExecutionPreference -ExecutionPreference Debug
+
+   Enables Verbose and Debug output.
+
+.OUTPUTS
+   None
 
 .NOTES
-   The function changes the script scope variables $script:VerbosePreference and $script:DebugPreference.
+   Modifies script-scope variables; does not use ShouldProcess.
 #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "", Justification = "This function only changes script scope variables")]
     [CmdletBinding()]

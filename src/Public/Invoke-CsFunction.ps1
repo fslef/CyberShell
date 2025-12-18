@@ -1,36 +1,46 @@
 function Invoke-CsFunction {
     <#
 .SYNOPSIS
-   Invokes a CyberShell function across multiple environments.
+    Invokes a CyberShell function across one or more environments.
 
 .DESCRIPTION
-   The Invoke-CsFunction function invokes a specified CyberShell function across multiple environments.
-   The function name, parameters, and target environments can be specified.
+    This function invokes a generic CyberShell command (for example Get-CsSomething)
+    across environments declared in the CyberShell configuration.
+
+    The "-Cs" prefix is replaced with an environment-specific prefix (for example
+    Az for AzureCloud). The configuration must be loaded first using Import-CsEnvironment.
 
 .PARAMETER CsFunctionName
-   The name of the CyberShell function to invoke. This should include the '-Cs' prefix.
+    Name of the CyberShell function to invoke, including the "-Cs" prefix
+    (for example Get-CsAzGovAssignment).
+    Does not accept pipeline input.
 
 .PARAMETER CsFunctionParams
-   A hashtable of parameters to pass to the CyberShell function.
+    Hashtable of parameters to pass to the target cmdlet.
+    Does not accept pipeline input.
 
 .PARAMETER CsEnvironmentName
-   The name of a specific environment to target. If not specified, the function is invoked across all environments.
+    Name of a specific environment to target. If omitted, targets all environments.
+    Does not accept pipeline input.
 
 .PARAMETER CsEnvironmentType
-   The type of environment to target. If not specified, the function is invoked across all types of environments.
+    Type of environment to target (for example AzureCloud, AWS, GCP). If omitted,
+    targets all types.
+    Does not accept pipeline input.
 
 .EXAMPLE
-   $params = @{ "ResourceGroupName" = "MyResourceGroup"; "Name" = "MyVM" }
-   Invoke-CsFunction -CsFunctionName "Get-CsVM" -CsFunctionParams $params -CsEnvironmentName "Prod"
+    Import-CsEnvironment
+    $params = @{ azAPICallConf = $azAPICallConf; CsEnvironment = 'Azure' }
+    Invoke-CsFunction -CsFunctionName 'Get-CsAzGovAssignment' -CsFunctionParams $params -CsEnvironmentType 'AzureCloud'
 
-.INPUTS
-   String, Hashtable, String, String
+    Invokes the command for all AzureCloud environments.
 
 .OUTPUTS
-   Varies based on the CyberShell function invoked.
+    System.Object
+    Output depends on the invoked function.
 
 .NOTES
-   The CyberShell data must be loaded (using Import-CsEnvironment) before this function can be used.
+    Requires Import-CsEnvironment to have been executed (initializes $script:CsData).
 #>
     [CmdletBinding()]
     param (

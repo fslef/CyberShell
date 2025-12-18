@@ -1,30 +1,43 @@
 ﻿function Get-CsLogCategory {
-
     <#
-    .SYNOPSIS
-    This script retrieves unique Azure resources and their types from the current subscription, and outputs them in a table format.
+.SYNOPSIS
+    Returns log/metric categories per resource type.
 
-    .DESCRIPTION
-    The script first clears the ListOfLogCategory. It then retrieves all Azure resources in the current subscription using the Get-AzResource cmdlet.
-    For each unique resource, it creates a new LogCategoryObj object with the SubscriptionId, LogCategoryObj, and a SourceType of 'Az'.
-    These LogCategoryObj objects are added to the ListOfLogCategory.
-    Finally, it outputs the ListOfLogCategory in a table format using the Format-Table cmdlet.
+.DESCRIPTION
+    This function builds a list of resource types present in the current subscription
+    using Get-AzResource, then materializes LogCategoryObj instances. It can optionally
+    filter to resource types that expose log categories only or metric categories only.
 
-    .EXAMPLE
-    Retrieve all Azure resources and their types in the current context.
+.PARAMETER LogOnly
+    When specified, returns only resource types with at least one log category.
+    Cannot be used with MetricOnly.
+
+.PARAMETER MetricOnly
+    When specified, returns only resource types with at least one metric category.
+    Cannot be used with LogOnly.
+
+.EXAMPLE
     Get-CsLogCategory
 
-    Retrieve all Azure resources and their types in the current context with logs only.
+    Displays resource types and their available log/metric categories.
+
+.EXAMPLE
     Get-CsLogCategory -LogOnly
 
-    .PARAMETER LogOnly
-    Si ce paramètre est spécifié, le script retournera uniquement les ressources pour lesquelles il y a des logs de type 'log'.
+    Displays only resource types that have log categories.
 
-    .PARAMETER MetricOnly
-    Si ce paramètre est spécifié, le script retournera uniquement les ressources pour lesquelles il y a des métriques.
+.EXAMPLE
+    Get-CsLogCategory -MetricOnly
 
-    .NOTES
-    Make sure you are logged in to your Azure account and have selected the correct subscription before running this script.
+    Displays only resource types that have metric categories.
+
+.OUTPUTS
+    System.Object
+    Emits formatting data (Format-Table) intended for console display.
+
+.NOTES
+    Make sure you are connected to Azure (Connect-AzAccount) and the correct subscription
+    is selected (Set-AzContext) before running this function.
       #>
 
     param (
