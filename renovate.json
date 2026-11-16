@@ -5,11 +5,11 @@
     "mergeConfidence:all-badges"
   ],
   "configMigration": true,
-  "dependencyDashboardAutoclose": true,
-  "dependencyDashboardLabels": [
-    "dependencies"
-  ],
-  "dependencyDashboardOSVVulnerabilitySummary": "all",
+  "dependencyDashboard": {
+    "autoclose": true,
+    "labels": ["dependencies"],
+    "osvVulnerabilitySummary": "all"
+  },
   "enabled": true,
   "osvVulnerabilityAlerts": true,
   "packageRules": [
